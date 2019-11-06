@@ -10,6 +10,8 @@ class Game
 
 	private:
 		static const float PlayerSpeed;
+		static const sf::Time TimePerFrame;
+
 		void processEvents();
 		void update(sf::Time);
 		void render();

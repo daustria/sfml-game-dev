@@ -2,6 +2,7 @@
 using namespace std;
 
 const float Game::PlayerSpeed = 100.f;
+const sf::Time Game::TimePerFrame = sf::seconds(1.f/60.f);
 
 Game::Game(): mWindow(sf::VideoMode(640, 480), "SFML Application"), mPlayer()
 {
@@ -18,11 +19,18 @@ Game::Game(): mWindow(sf::VideoMode(640, 480), "SFML Application"), mPlayer()
 void Game::run()
 {
 	sf::Clock clock;
+	sf::Time timeSinceLastUpdate = sf::Time::Zero;
+
 	while (mWindow.isOpen())
 	{
-		sf::Time deltaTime = clock.restart();
 		processEvents();
-		update(deltaTime);
+		timeSinceLastUpdate += clock.restart();
+		while(timeSinceLastUpdate > TimePerFrame)
+		{
+			timeSinceLastUpdate -= TimePerFrame;
+			processEvents();
+			update(TimePerFrame);
+		}
 		render();
 	}
 
@@ -83,7 +91,3 @@ void Game::render()
 	mWindow.draw(mPlayer);
 	mWindow.display();
 }
-
-
-
-
