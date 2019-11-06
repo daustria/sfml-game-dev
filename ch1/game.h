@@ -18,7 +18,8 @@ class Game
 		void handlePlayerInput(sf::Keyboard::Key, bool);
 
 		sf::RenderWindow mWindow;
-		sf::CircleShape mPlayer;
+		sf::Texture mTexture;
+		sf::Sprite mPlayer;
 
 		bool mIsMovingUp;
 		bool mIsMovingDown;
