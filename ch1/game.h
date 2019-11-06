@@ -9,11 +9,18 @@ class Game
 		void run();
 
 	private:
+		static const float PlayerSpeed;
 		void processEvents();
-		void update();
+		void update(sf::Time);
 		void render();
+		void handlePlayerInput(sf::Keyboard::Key, bool);
 
 		sf::RenderWindow mWindow;
 		sf::CircleShape mPlayer;
+
+		bool mIsMovingUp;
+		bool mIsMovingDown;
+		bool mIsMovingRight;
+		bool mIsMovingLeft;
 };
 #endif //GAME_H
