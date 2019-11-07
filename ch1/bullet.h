@@ -11,6 +11,7 @@ class Bullet
 		sf::RectangleShape getRect();
 	private:
 		const int offsetY;
+		const int offsetX;
 		sf::RectangleShape r;
 };
 #endif //BULLET_H

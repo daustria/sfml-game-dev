@@ -2,9 +2,9 @@
 #include "bullet.h"
 using namespace std;
 
-const float Game::PlayerSpeed = 100.f;
+const float Game::PlayerSpeed = 300.f;
+const float Game::BulletSpeed = 900.f;
 const sf::Time Game::TimePerFrame = sf::seconds(1.f/60.f);
-const int bulletSpeed = 300.f;
 
 Game::Game(): maxBullets(1000), mWindow(sf::VideoMode(640, 480), "SFML Application"), mTexture(), mPlayer()
 {
@@ -82,8 +82,9 @@ void Game::processEvents()
 
 void Game::update(sf::Time deltaTime)
 {
+
 	sf::Vector2f movement(0.f, 0.f);
-	sf::Vector2f bulletMovement(0.f, -1*bulletSpeed);
+	sf::Vector2f bulletMovement(0.f, -1*BulletSpeed);
 
 	if (mIsMovingUp)
 		movement.y -= PlayerSpeed;
@@ -94,23 +95,19 @@ void Game::update(sf::Time deltaTime)
 	if (mIsMovingRight)
 		movement.x += PlayerSpeed;
 	if (mFire) {
+		sf::Time delta = deltaTime;
 		sf::Vector2f pos = mPlayer.getPosition();
-		Bullet *b = new Bullet(pos.x, pos.y);
+		shared_ptr<Bullet> b(new Bullet(pos.x, pos.y));
 		bullets.push_back(b);
 	}
 
 	mPlayer.move(movement * deltaTime.asSeconds());
 
-	for (auto it = bullets.begin(); it != bullets.end(); ++it)
-	{
-		sf::Vector2f pos = (*it)->pos();
-		if (pos.y < 0){
-			delete *it;
-			bullets.erase(it);
+	for (auto &b : bullets){
+		sf::Vector2f pos = b->pos();
+		if (pos.y < -100)
 			continue;
-		}
-
-		(*it)->move(bulletMovement * deltaTime.asSeconds());
+		b->move(bulletMovement * deltaTime.asSeconds());
 	}
 }
 

@@ -2,6 +2,7 @@
 #define GAME_H
 #include <SFML/Graphics.hpp>
 #include <vector>
+#include <memory>
 #include "bullet.h"
 
 class Game
@@ -12,6 +13,7 @@ class Game
 
 	private:
 		static const float PlayerSpeed;
+		static const float BulletSpeed;
 		static const sf::Time TimePerFrame;
 
 		void processEvents();
@@ -23,7 +25,7 @@ class Game
 		sf::Texture mTexture;
 		sf::Sprite mPlayer;
 
-		std::vector<Bullet*> bullets;
+		std::vector<std::shared_ptr<Bullet>> bullets;
 		const int maxBullets;
 
 		bool mIsMovingUp;
