@@ -1,6 +1,8 @@
 #ifndef GAME_H
 #define GAME_H
 #include <SFML/Graphics.hpp>
+#include <vector>
+#include "bullet.h"
 
 class Game
 {
@@ -21,9 +23,14 @@ class Game
 		sf::Texture mTexture;
 		sf::Sprite mPlayer;
 
+		std::vector<Bullet*> bullets;
+		const int maxBullets;
+
 		bool mIsMovingUp;
 		bool mIsMovingDown;
 		bool mIsMovingRight;
 		bool mIsMovingLeft;
+		bool mFire;
+
 };
 #endif //GAME_H
