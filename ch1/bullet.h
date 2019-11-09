@@ -5,7 +5,7 @@
 class Bullet
 {
 	public:
-		Bullet(const int &, const int &);
+		Bullet(const int &, const int &, const int &, const int &);
 		void move(const sf::Vector2f &);
 		sf::Vector2f pos();
 		sf::RectangleShape getRect();

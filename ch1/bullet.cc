@@ -1,9 +1,9 @@
 #include "bullet.h"
 
-Bullet::Bullet(const int &x, const int &y) : offsetY(2), offsetX(22)
+Bullet::Bullet(const int & x, const int & y, const int &offX, const int &offY): offsetX(offX), offsetY(offY)
 {
-	r.setPosition(x + offsetX, y - offsetY);
-	r.setSize(sf::Vector2f(5,25));
+	r.setPosition(x + offsetX, y + offsetY);
+	r.setSize(sf::Vector2f(2,5));
 	r.setOutlineColor(sf::Color::Yellow);
 	r.setOutlineThickness(5);
 }

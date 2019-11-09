@@ -8,7 +8,7 @@ const float Game::PlayerSpeed = 300.f;
 const float Game::BulletSpeed = 900.f;
 const sf::Time Game::TimePerFrame = sf::seconds(1.f/60.f);
 
-Game::Game(): mWindow(sf::VideoMode(640, 480), "SFML Application"), mTexture(), mPlayer()
+Game::Game(): mWindow(sf::VideoMode(640, 480), "SFML Application"), mTexture(), mPlayer(), shotInterval(sf::seconds(2.f/60.f))
 {
 
 	if(!mTexture.loadFromFile("Eagle.png"))
@@ -24,6 +24,8 @@ Game::Game(): mWindow(sf::VideoMode(640, 480), "SFML Application"), mTexture(), 
 	mIsMovingUp = false;
 	mIsMovingDown = false;
 	mFire = false;
+
+	bulletTimer;
 }
 
 void Game::run()
@@ -57,8 +59,9 @@ void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
 		mIsMovingLeft = isPressed;
 	else if (key == sf::Keyboard::D)
 		mIsMovingRight = isPressed;
-	else if (key == sf::Keyboard::Space)
+	else if (key == sf::Keyboard::Space) {
 		mFire = isPressed;
+	}
 
 }
 
@@ -97,14 +100,22 @@ void Game::update(sf::Time deltaTime)
 	if (mIsMovingRight)
 		movement.x += PlayerSpeed;
 	if (mFire) {
-		sf::Vector2f pos = mPlayer.getPosition();
-		shared_ptr<Bullet> b(new Bullet(pos.x, pos.y));
-		bullets.push_back(b);
+
+		sf::Time t = bulletTimer.getElapsedTime();
+
+		if(t > shotInterval){
+			sf::Vector2f pos = mPlayer.getPosition();
+			shared_ptr<Bullet> b(new Bullet(pos.x, pos.y, 22, 2));
+			bullets.push_back(b);
+			bulletTimer.restart();
+		}
 	}
 
 	mPlayer.move(movement * deltaTime.asSeconds());
 
+	// move bullets 
 	for (auto it = bullets.begin(); it != bullets.end(); it){
+
 		(*it)->move(bulletMovement * deltaTime.asSeconds());
 
 		sf::Vector2f pos = (*it)->pos();

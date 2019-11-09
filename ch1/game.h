@@ -15,7 +15,7 @@ class Game
 		static const float PlayerSpeed;
 		static const float BulletSpeed;
 		static const sf::Time TimePerFrame;
-
+		
 		void processEvents();
 		void update(sf::Time);
 		void render();
@@ -24,8 +24,11 @@ class Game
 		sf::RenderWindow mWindow;
 		sf::Texture mTexture;
 		sf::Sprite mPlayer;
+		sf::Clock bulletTimer;
 
 		std::vector<std::shared_ptr<Bullet>> bullets;
+
+		const sf::Time shotInterval;
 
 		bool mIsMovingUp;
 		bool mIsMovingDown;
