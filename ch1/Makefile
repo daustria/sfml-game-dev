@@ -1,12 +1,11 @@
-OBJS = main.o game.o
+OBJS = main.o game.o bullet.o
 CXX = g++
 CXXFLAGS = -Wall -std=c++14
-LDLIBS = -lsfml-graphics -lsfml-window -lsfml-system
-LDFLAGS = -L/c/Program Files/SFML-2.5.1/lib
-INCLUDES = -I/c/Program Files/SFML-2.5.1/include 
+LDFLAGS = -L/c/SFML-2.5.1/lib
+INCLUDES = -I/SFML-2.5.1/include 
 
 sfml-app: $(OBJS)
-	$(CXX) $(OBJS) -o sfml-app $(LDFLAGS) $(LDLIBS)
+	$(CXX) $(OBJS) -o sfml-app $(LDFLAGS) -lsfml-graphics -lsfml-window -lsfml-system
 
 %.o: %.cc
 	$(CXX) -c $< $(INCLUDES)

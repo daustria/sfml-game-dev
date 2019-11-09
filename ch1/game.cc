@@ -1,3 +1,5 @@
+#include <iostream>
+#include <string>
 #include "game.h"
 #include "bullet.h"
 using namespace std;
@@ -6,7 +8,7 @@ const float Game::PlayerSpeed = 300.f;
 const float Game::BulletSpeed = 900.f;
 const sf::Time Game::TimePerFrame = sf::seconds(1.f/60.f);
 
-Game::Game(): maxBullets(1000), mWindow(sf::VideoMode(640, 480), "SFML Application"), mTexture(), mPlayer()
+Game::Game(): mWindow(sf::VideoMode(640, 480), "SFML Application"), mTexture(), mPlayer()
 {
 
 	if(!mTexture.loadFromFile("Eagle.png"))
@@ -95,7 +97,6 @@ void Game::update(sf::Time deltaTime)
 	if (mIsMovingRight)
 		movement.x += PlayerSpeed;
 	if (mFire) {
-		sf::Time delta = deltaTime;
 		sf::Vector2f pos = mPlayer.getPosition();
 		shared_ptr<Bullet> b(new Bullet(pos.x, pos.y));
 		bullets.push_back(b);
@@ -103,11 +104,23 @@ void Game::update(sf::Time deltaTime)
 
 	mPlayer.move(movement * deltaTime.asSeconds());
 
-	for (auto &b : bullets){
-		sf::Vector2f pos = b->pos();
-		if (pos.y < -100)
-			continue;
-		b->move(bulletMovement * deltaTime.asSeconds());
+	for (auto it = bullets.begin(); it != bullets.end(); it){
+		(*it)->move(bulletMovement * deltaTime.asSeconds());
+
+		sf::Vector2f pos = (*it)->pos();
+
+		if (pos.y < -100){
+			// remove the bullets offscreen
+			// swap places with the last bullet in the vector, then call pop_back()
+			shared_ptr<Bullet> tmp = bullets.back();
+			bullets.back() = *it;
+			*it = tmp;
+
+			bullets.back().reset();
+			bullets.pop_back();
+		} else {
+			++it;
+		}
 	}
 }
 

@@ -26,7 +26,6 @@ class Game
 		sf::Sprite mPlayer;
 
 		std::vector<std::shared_ptr<Bullet>> bullets;
-		const int maxBullets;
 
 		bool mIsMovingUp;
 		bool mIsMovingDown;
