@@ -2,6 +2,7 @@
 #include <string>
 #include "game.h"
 #include "bullet.h"
+#include "enemy.h"
 using namespace std;
 
 const float Game::PlayerSpeed = 300.f;
@@ -17,7 +18,7 @@ Game::Game(): mWindow(sf::VideoMode(640, 480), "SFML Application"), mTexture(), 
 	}
 
 	mPlayer.setTexture(mTexture);
-	mPlayer.setPosition(100.f, 100.f);
+	mPlayer.setPosition(300.f, 300.f);
 
 	mIsMovingLeft = false;
 	mIsMovingRight = false;
@@ -88,7 +89,12 @@ void Game::processEvents()
 void Game::update(sf::Time deltaTime)
 {
 
+
 	sf::Vector2f movement(0.f, 0.f);
+
+	shared_ptr<Enemy> e(new Enemy(100, 100, movement));
+	enemies.push_back(e);
+
 	sf::Vector2f bulletMovement(0.f, -1*BulletSpeed);
 
 	if (mIsMovingUp)
@@ -139,5 +145,7 @@ void Game::render()
 	mWindow.draw(mPlayer);
 	for (auto &b : bullets)
 		mWindow.draw(b->shape());
+	for (auto &e : enemies)
+		mWindow.draw(e->shape());
 	mWindow.display();
 }

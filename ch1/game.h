@@ -4,6 +4,7 @@
 #include <vector>
 #include <memory>
 #include "bullet.h"
+#include "enemy.h"
 
 class Game
 {
@@ -27,6 +28,7 @@ class Game
 		sf::Clock bulletTimer;
 
 		std::vector<std::shared_ptr<Bullet>> bullets;
+		std::vector<std::shared_ptr<Enemy>> enemies;
 
 		const sf::Time shotInterval;
 
