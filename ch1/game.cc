@@ -105,7 +105,7 @@ void Game::update(sf::Time deltaTime)
 
 		if(t > shotInterval){
 			sf::Vector2f pos = mPlayer.getPosition();
-			shared_ptr<Bullet> b(new Bullet(pos.x, pos.y, 22, 2));
+			shared_ptr<Bullet> b(new Bullet(pos.x, pos.y, 22, 2, bulletMovement));
 			bullets.push_back(b);
 			bulletTimer.restart();
 		}
@@ -114,13 +114,11 @@ void Game::update(sf::Time deltaTime)
 	mPlayer.move(movement * deltaTime.asSeconds());
 
 	// move bullets 
-	for (auto it = bullets.begin(); it != bullets.end(); it){
+	for (auto it = bullets.begin(); it != bullets.end();){
 
-		(*it)->move(bulletMovement * deltaTime.asSeconds());
+		(*it)->move(deltaTime);
 
-		sf::Vector2f pos = (*it)->pos();
-
-		if (pos.y < -100){
+		if ((*it)->offscreen(mWindow)){
 			// remove the bullets offscreen
 			// swap places with the last bullet in the vector, then call pop_back()
 			shared_ptr<Bullet> tmp = bullets.back();
@@ -140,6 +138,6 @@ void Game::render()
 	mWindow.clear();
 	mWindow.draw(mPlayer);
 	for (auto &b : bullets)
-		mWindow.draw(b->getRect());
+		mWindow.draw(b->shape());
 	mWindow.display();
 }

@@ -5,13 +5,15 @@
 class Bullet
 {
 	public:
-		Bullet(const int &, const int &, const int &, const int &);
-		void move(const sf::Vector2f &);
-		sf::Vector2f pos();
-		sf::RectangleShape getRect();
+		Bullet(const int &, const int &, const int &, const int &, const sf::Vector2f &);
+		void move(const sf::Time &);
+		sf::Vector2f pos() const;
+		sf::RectangleShape shape() const;
+		bool offscreen(const sf::Window &) const;
 	private:
 		const int offsetY;
 		const int offsetX;
 		sf::RectangleShape r;
+		const sf::Vector2f movement;
 };
 #endif //BULLET_H
