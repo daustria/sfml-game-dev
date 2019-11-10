@@ -15,6 +15,5 @@ class Enemy
 	private:
 		sf::CircleShape c;
 		const sf::Vector2f movement;
-		sf::FloatRect collisionbox;
 };
 #endif //ENEMY_H

@@ -1,4 +1,4 @@
-OBJS = main.o game.o bullet.o
+OBJS = main.o game.o bullet.o enemy.o
 CXX = g++
 CXXFLAGS = -Wall -std=c++14
 LDFLAGS = -L/c/SFML-2.5.1/lib

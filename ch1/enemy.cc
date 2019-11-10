@@ -8,11 +8,6 @@ Enemy::Enemy(const int & x, const int & y, const sf::Vector2f & mv, const int & 
 	c.setRadius(radius);
 	c.setPosition(x, y);
 	c.setFillColor(sf::Color::Red);
-
-	collisionbox.left = x + radius*cos(PI/4);
-	collisionbox.top = y + radius*sin(PI/4);
-	collisionbox.width = radius;
-	collisionbox.height = radius;
 }
 
 sf::CircleShape Enemy::shape() const
@@ -34,7 +29,18 @@ bool Enemy::offscreen(const sf::Window &display) const
 
 sf::FloatRect Enemy::hitbox() const
 {
-	return collisionbox;
+	const float radius = c.getRadius();
+	const sf::Vector2f pos = c.getPosition();
+
+	const float left = pos.x + radius * cos(PI/4);
+	const float top = pos.y + radius * sin(PI/4);
+
+	return sf::FloatRect(left, top, radius, radius);
+}
+
+void Enemy::move(const sf::Time & delta)
+{
+	c.move(movement * delta.asSeconds());
 }
 
 

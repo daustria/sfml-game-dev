@@ -31,3 +31,5 @@ bool Bullet::offscreen(const sf::Window & display) const
 	return (y < -100 || y > v.y);
 }
 
+
+

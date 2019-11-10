@@ -119,8 +119,15 @@ void Game::update(sf::Time deltaTime)
 
 	mPlayer.move(movement * deltaTime.asSeconds());
 
+	for (auto it = enemies.begin(); it != enemies.end(); ++it)
+	{
+		//TODO implement collision logic
+	}
+
+
 	// move bullets 
-	for (auto it = bullets.begin(); it != bullets.end();){
+	for (auto it = bullets.begin(); it != bullets.end();)
+	{
 
 		(*it)->move(deltaTime);
 
