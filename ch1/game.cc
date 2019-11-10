@@ -14,7 +14,7 @@ Game::Game(): mWindow(sf::VideoMode(640, 480), "SFML Application"), mTexture(), 
 
 	if(!mTexture.loadFromFile("Eagle.png"))
 	{
-		//...do something later
+		//...handle error
 	}
 
 	mPlayer.setTexture(mTexture);
@@ -33,6 +33,11 @@ void Game::run()
 {
 	sf::Clock clock;
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
+
+
+	sf::Vector2f zerovec(0, 0);
+	shared_ptr<Enemy> e(new Enemy(100, 100, zerovec));
+	enemies.push_back(e);
 
 	while (mWindow.isOpen())
 	{
@@ -86,14 +91,65 @@ void Game::processEvents()
 	}
 }
 
+void swapWithLast(vector<shared_ptr<Bullet>> & vec, shared_ptr<Bullet> & ptr)
+{
+	shared_ptr<Bullet> tmp = vec.back();
+	vec.back() = ptr;
+	ptr = tmp;
+	tmp.reset();
+}
+
+void swapWithLast(vector<shared_ptr<Enemy>> & vec, shared_ptr<Enemy> & ptr)
+{
+	shared_ptr<Enemy> tmp = vec.back();
+	vec.back() = ptr;
+	ptr = tmp;
+	tmp.reset();
+}
+
+void Game::clearInactiveBullets()
+{
+	for (auto it = bullets.begin() ; it != bullets.end() ; )
+		if ((*it)->offscreen(mWindow) || (*it)->hitSomething) {
+			swapWithLast(bullets, *it);
+			bullets.back().reset();
+			bullets.pop_back();
+		} else {
+			++it;
+		}
+}
+
+void Game::handleShotEnemies()
+{
+	for (auto it = enemies.begin(); it != enemies.end() ; )
+	{
+
+		cout << (*it)->dead() << endl;
+
+		for (auto &b : bullets)
+		{
+			if (b->hitbox().intersects((*it)->hitbox())) {
+				b->hitSomething = true;
+				(*it)->removeHealth(b->getDamage());
+			}
+		}
+
+		if ((*it)->dead()) {
+			swapWithLast(enemies, *it);
+			enemies.back().reset();
+			enemies.pop_back();
+		} else {
+			++it;
+		}
+	}
+
+}
+
+
 void Game::update(sf::Time deltaTime)
 {
 
-
 	sf::Vector2f movement(0.f, 0.f);
-
-	shared_ptr<Enemy> e(new Enemy(100, 100, movement));
-	enemies.push_back(e);
 
 	sf::Vector2f bulletMovement(0.f, -1*BulletSpeed);
 
@@ -109,8 +165,9 @@ void Game::update(sf::Time deltaTime)
 
 		sf::Time t = bulletTimer.getElapsedTime();
 
-		if(t > shotInterval){
+		if(t > shotInterval) {
 			sf::Vector2f pos = mPlayer.getPosition();
+			//offset the bullet to appear above the player
 			shared_ptr<Bullet> b(new Bullet(pos.x, pos.y, 22, 2, bulletMovement));
 			bullets.push_back(b);
 			bulletTimer.restart();
@@ -119,31 +176,16 @@ void Game::update(sf::Time deltaTime)
 
 	mPlayer.move(movement * deltaTime.asSeconds());
 
-	for (auto it = enemies.begin(); it != enemies.end(); ++it)
-	{
-		//TODO implement collision logic
-	}
-
 
 	// move bullets 
-	for (auto it = bullets.begin(); it != bullets.end();)
-	{
-
+	for (auto it = bullets.begin(); it != bullets.end(); ++it)
 		(*it)->move(deltaTime);
 
-		if ((*it)->offscreen(mWindow)){
-			// remove the bullets offscreen
-			// swap places with the last bullet in the vector, then call pop_back()
-			shared_ptr<Bullet> tmp = bullets.back();
-			bullets.back() = *it;
-			*it = tmp;
+	handleShotEnemies();
+	cout << "handled shot enemies" << endl;
+	clearInactiveBullets();
+	cout << "cleared inactive bullets" << endl;
 
-			bullets.back().reset();
-			bullets.pop_back();
-		} else {
-			++it;
-		}
-	}
 }
 
 void Game::render()

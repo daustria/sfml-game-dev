@@ -32,6 +32,9 @@ class Game
 
 		const sf::Time shotInterval;
 
+		void clearInactiveBullets();
+		void handleShotEnemies();
+
 		bool mIsMovingUp;
 		bool mIsMovingDown;
 		bool mIsMovingRight;

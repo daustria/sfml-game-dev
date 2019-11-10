@@ -1,12 +1,13 @@
 #include "bullet.h"
 
-Bullet::Bullet(const int &x, const int &y, const int &offX, const int &offY, const sf::Vector2f &direction): 
-	offsetX(offX), offsetY(offY), movement(direction)
+Bullet::Bullet(const int &x, const int &y, const int &offX, const int &offY, const sf::Vector2f &direction, const int &dmg): 
+	offsetX(offX), offsetY(offY), movement(direction), damage(dmg)
 {
 	r.setPosition(x + offsetX, y + offsetY);
 	r.setSize(sf::Vector2f(2,5));
 	r.setOutlineColor(sf::Color::Yellow);
 	r.setOutlineThickness(5);
+	hitSomething = false;
 }
 
 void Bullet::move(const sf::Time &delta)
@@ -31,5 +32,14 @@ bool Bullet::offscreen(const sf::Window & display) const
 	return (y < -100 || y > v.y);
 }
 
+sf::FloatRect Bullet::hitbox() const
+{
+	return r.getGlobalBounds();
+}
+
+int Bullet::getDamage() const
+{
+	return damage;
+}
 
 

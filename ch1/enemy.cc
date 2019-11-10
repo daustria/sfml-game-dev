@@ -2,8 +2,9 @@
 #include "enemy.h"
 #define PI 3.141592654
 
-Enemy::Enemy(const int & x, const int & y, const sf::Vector2f & mv, const int & radius): 
-	movement(mv)
+Enemy::Enemy(const int & x, const int & y, const sf::Vector2f & mv, const int & radius, const int & life): 
+	movement(mv),
+	health(life)
 {
 	c.setRadius(radius);
 	c.setPosition(x, y);
@@ -43,5 +44,12 @@ void Enemy::move(const sf::Time & delta)
 	c.move(movement * delta.asSeconds());
 }
 
+void Enemy::removeHealth(const int & damage)
+{
+	health -= damage;
+}
 
-
+bool Enemy::dead() const
+{
+	return health <= 0;
+}
