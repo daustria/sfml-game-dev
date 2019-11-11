@@ -107,6 +107,7 @@ void Game::processEvents()
 
 
 //TODO: how can i merge these two methods? it seems unnecessary
+//answer: function templates
 void swapWithLast(vector<shared_ptr<Bullet>> & vec, shared_ptr<Bullet> & ptr)
 {
 	shared_ptr<Bullet> tmp = vec.back();
@@ -179,9 +180,10 @@ void Game::update(sf::Time deltaTime)
 		sf::Time t = bulletTimer.getElapsedTime();
 
 		if(t > shotInterval) {
-			sf::Vector2f pos = mPlayer.getPosition();
+			sf::Vector2f pos(mPlayer.getPosition());
+			sf::Vector2f offset(22,2);
 			//offset the bullet to appear above the player
-			shared_ptr<Bullet> b(new Bullet(pos.x, pos.y, 22, 2, bulletMovement));
+			shared_ptr<Bullet> b(new Bullet(pos, offset, bulletMovement));
 			bullets.push_back(b);
 			bulletTimer.restart();
 		}

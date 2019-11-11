@@ -25,7 +25,7 @@ bool Enemy::offscreen(const sf::Window &display) const
 {
 	const sf::Vector2u v = display.getSize();
 	int y = this->pos().y;
-	return (y < -100 || y > v.y);
+	return (y < -100 || y > (int) v.y);
 }
 
 sf::FloatRect Enemy::hitbox() const
