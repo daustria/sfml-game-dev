@@ -6,7 +6,7 @@
 class Enemy
 {
 	public:
-		Enemy(const int &, const int &, const sf::Vector2f &, const int & radius = 25.f, const int & life = 100);
+		Enemy(int x, int y, const sf::Vector2f &, float radius = 25.f, int life = 100);
 
 		void move (const sf::Time &);
 		sf::Vector2f pos() const;
@@ -16,7 +16,7 @@ class Enemy
 
 		sf::FloatRect hitbox() const;
 
-		void removeHealth(const int &);
+		void removeHealth(int);
 
 		bool dead() const;
 

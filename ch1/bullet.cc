@@ -1,7 +1,10 @@
 #include "bullet.h"
 
-Bullet::Bullet(const int &x, const int &y, const int &offX, const int &offY, const sf::Vector2f &direction, const int &dmg): 
-	offsetX(offX), offsetY(offY), movement(direction), damage(dmg)
+Bullet::Bullet(int x, int y, int offX, int offY, const sf::Vector2f &direction, int dmg): 
+	offsetX(offX), 
+	offsetY(offY), 
+	movement(direction), 
+	damage(dmg)
 {
 	r.setPosition(x + offsetX, y + offsetY);
 	r.setSize(sf::Vector2f(2,5));

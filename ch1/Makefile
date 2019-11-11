@@ -8,7 +8,7 @@ sfml-app: $(OBJS)
 	$(CXX) $(CXXFLAGS) $(OBJS) -o sfml-app $(LDFLAGS) -lsfml-graphics -lsfml-window -lsfml-system
 
 %.o: %.cc
-	$(CXX) -c $< $(INCLUDES)
+	$(CXX) $(CXXFLAGS) -c $< $(INCLUDES)
 
 clean:
 	$(RM) sfml-app $(OBJS)

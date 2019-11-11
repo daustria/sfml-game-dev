@@ -25,8 +25,6 @@ Game::Game(): mWindow(sf::VideoMode(640, 480), "SFML Application"), mTexture(), 
 	mIsMovingUp = false;
 	mIsMovingDown = false;
 	mFire = false;
-
-	bulletTimer;
 }
 
 void Game::spawnEnemies(int numEnemies, int rows)
