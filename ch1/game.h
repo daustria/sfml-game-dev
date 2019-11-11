@@ -21,11 +21,14 @@ class Game
 		void update(sf::Time);
 		void render();
 		void handlePlayerInput(sf::Keyboard::Key, bool);
+		void spawnEnemies(int n, int rows);
 
 		sf::RenderWindow mWindow;
 		sf::Texture mTexture;
 		sf::Sprite mPlayer;
+
 		sf::Clock bulletTimer;
+		sf::Clock enemyMoveTimer;
 
 		std::vector<std::shared_ptr<Bullet>> bullets;
 		std::vector<std::shared_ptr<Enemy>> enemies;

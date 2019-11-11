@@ -29,15 +29,33 @@ Game::Game(): mWindow(sf::VideoMode(640, 480), "SFML Application"), mTexture(), 
 	bulletTimer;
 }
 
+void Game::spawnEnemies(int numEnemies, int rows)
+{
+	//TODO: finish making this method
+	float height = 100.f;
+	sf::Vector2f zerovec(0, 0);
+
+	float width = mWindow.getSize().x;
+
+	const float horizontalSpawnBoundary = width/10;
+	float start = horizontalSpawnBoundary;
+	float end = width - horizontalSpawnBoundary;
+
+	float range = end - start;
+
+	for (float x = start; x <= end; x += range/numEnemies)
+	{
+		shared_ptr<Enemy> e(new Enemy(x, height, zerovec));
+		enemies.push_back(e);
+	}
+}
+
 void Game::run()
 {
 	sf::Clock clock;
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
 
-
-	sf::Vector2f zerovec(0, 0);
-	shared_ptr<Enemy> e(new Enemy(100, 100, zerovec));
-	enemies.push_back(e);
+	spawnEnemies(10, 0);
 
 	while (mWindow.isOpen())
 	{
@@ -65,10 +83,8 @@ void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
 		mIsMovingLeft = isPressed;
 	else if (key == sf::Keyboard::D)
 		mIsMovingRight = isPressed;
-	else if (key == sf::Keyboard::Space) {
+	else if (key == sf::Keyboard::Space)
 		mFire = isPressed;
-	}
-
 }
 
 void Game::processEvents()
@@ -96,7 +112,6 @@ void swapWithLast(vector<shared_ptr<Bullet>> & vec, shared_ptr<Bullet> & ptr)
 	shared_ptr<Bullet> tmp = vec.back();
 	vec.back() = ptr;
 	ptr = tmp;
-	tmp.reset();
 }
 
 void swapWithLast(vector<shared_ptr<Enemy>> & vec, shared_ptr<Enemy> & ptr)
@@ -104,7 +119,6 @@ void swapWithLast(vector<shared_ptr<Enemy>> & vec, shared_ptr<Enemy> & ptr)
 	shared_ptr<Enemy> tmp = vec.back();
 	vec.back() = ptr;
 	ptr = tmp;
-	tmp.reset();
 }
 
 void Game::clearInactiveBullets()
@@ -121,11 +135,13 @@ void Game::clearInactiveBullets()
 
 void Game::handleShotEnemies()
 {
+
+	for (auto &e : enemies)
+		cout << e;
+	cout << endl;
+
 	for (auto it = enemies.begin(); it != enemies.end() ; )
 	{
-
-		cout << (*it)->dead() << endl;
-
 		for (auto &b : bullets)
 		{
 			if (b->hitbox().intersects((*it)->hitbox())) {
@@ -148,9 +164,10 @@ void Game::handleShotEnemies()
 
 void Game::update(sf::Time deltaTime)
 {
+	handleShotEnemies();
+	clearInactiveBullets();
 
 	sf::Vector2f movement(0.f, 0.f);
-
 	sf::Vector2f bulletMovement(0.f, -1*BulletSpeed);
 
 	if (mIsMovingUp)
@@ -176,15 +193,9 @@ void Game::update(sf::Time deltaTime)
 
 	mPlayer.move(movement * deltaTime.asSeconds());
 
-
 	// move bullets 
 	for (auto it = bullets.begin(); it != bullets.end(); ++it)
 		(*it)->move(deltaTime);
-
-	handleShotEnemies();
-	cout << "handled shot enemies" << endl;
-	clearInactiveBullets();
-	cout << "cleared inactive bullets" << endl;
 
 }
 
