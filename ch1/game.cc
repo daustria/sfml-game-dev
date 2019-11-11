@@ -107,6 +107,8 @@ void Game::processEvents()
 	}
 }
 
+
+//TODO: how can i merge these two methods? it seems unnecessary
 void swapWithLast(vector<shared_ptr<Bullet>> & vec, shared_ptr<Bullet> & ptr)
 {
 	shared_ptr<Bullet> tmp = vec.back();
@@ -135,10 +137,6 @@ void Game::clearInactiveBullets()
 
 void Game::handleShotEnemies()
 {
-
-	for (auto &e : enemies)
-		cout << e;
-	cout << endl;
 
 	for (auto it = enemies.begin(); it != enemies.end() ; )
 	{
