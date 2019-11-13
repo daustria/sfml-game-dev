@@ -106,20 +106,13 @@ void Game::processEvents()
 }
 
 
-//TODO: how can i merge these two methods? it seems unnecessary
-//answer: function templates
-void swapWithLast(vector<shared_ptr<Bullet>> & vec, shared_ptr<Bullet> & ptr)
-{
-	shared_ptr<Bullet> tmp = vec.back();
-	vec.back() = ptr;
-	ptr = tmp;
-}
 
-void swapWithLast(vector<shared_ptr<Enemy>> & vec, shared_ptr<Enemy> & ptr)
+template <typename PointerVec, typename gameObjPtr> 
+void swapWithLast(PointerVec &v, gameObjPtr &p)
 {
-	shared_ptr<Enemy> tmp = vec.back();
-	vec.back() = ptr;
-	ptr = tmp;
+	gameObjPtr temp = v.back();
+	v.back() = p;
+	p = temp;
 }
 
 void Game::clearInactiveBullets()
