@@ -13,15 +13,13 @@ class Game
 		void run();
 
 	private:
-		static const float PlayerSpeed;
-		static const float BulletSpeed;
 		static const sf::Time TimePerFrame;
 		
 		void processEvents();
 		void update(sf::Time);
 		void render();
 		void handlePlayerInput(sf::Keyboard::Key, bool);
-		void spawnEnemies(int n, int rows);
+		void spawnEnemies();
 
 		sf::RenderWindow mWindow;
 		sf::Texture mTexture;
@@ -43,6 +41,10 @@ class Game
 		bool mIsMovingRight;
 		bool mIsMovingLeft;
 		bool mFire;
+
+		const float enemyBoundary;
+		const float PlayerSpeed;
+		const float BulletSpeed;
 
 };
 #endif //GAME_H

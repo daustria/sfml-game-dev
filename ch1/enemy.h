@@ -20,9 +20,11 @@ class Enemy
 
 		bool dead() const;
 
+		void setMovement(const sf::Vector2f &);
+
 	private:
 		sf::CircleShape c;
-		const sf::Vector2f movement;
+		sf::Vector2f movement;
 		int health;
 };
 #endif //ENEMY_H

@@ -1,15 +1,21 @@
 #include <iostream>
 #include <string>
+#include <algorithm>
+#include <random>
 #include "game.h"
 #include "bullet.h"
 #include "enemy.h"
 using namespace std;
 
-const float Game::PlayerSpeed = 300.f;
-const float Game::BulletSpeed = 900.f;
 const sf::Time Game::TimePerFrame = sf::seconds(1.f/60.f);
 
-Game::Game(): mWindow(sf::VideoMode(640, 480), "SFML Application"), mTexture(), mPlayer(), shotInterval(sf::seconds(2.f/60.f))
+Game::Game(): mWindow(sf::VideoMode(640, 480), "SFML Application"), 
+	mTexture(), 
+	mPlayer(), 
+	shotInterval(sf::seconds(5.f/60.f)),
+	enemyBoundary(100.f),
+	PlayerSpeed(300.f),
+	BulletSpeed(900.f)
 {
 
 	if(!mTexture.loadFromFile("Eagle.png"))
@@ -27,33 +33,54 @@ Game::Game(): mWindow(sf::VideoMode(640, 480), "SFML Application"), mTexture(), 
 	mFire = false;
 }
 
-void Game::spawnEnemies(int numEnemies, int rows)
+vector<int> drawWithoutReplacement(int n, int k)
 {
-	//TODO: finish making this method
-	float height = 100.f;
-	sf::Vector2f zerovec(0, 0);
+	vector<int> vec;
+	for(int i = 1; i <= n; ++i)
+		vec.emplace_back(i);
 
-	float width = mWindow.getSize().x;
+	random_shuffle(vec.begin(), vec.end());
+	
+	vector<int> sample;
+	for(int i = 0; i < k; ++i)
+		sample.emplace_back(vec.at(i));
 
-	const float horizontalSpawnBoundary = width/10;
-	float start = horizontalSpawnBoundary;
-	float end = width - horizontalSpawnBoundary;
+	return sample;
+}
 
-	float range = end - start;
 
-	for (float x = start; x <= end; x += range/numEnemies)
+void Game::spawnEnemies()
+{
+	const int maxEnemies = 10;
+	const float width = mWindow.getSize().x;
+	const float boundary = width/10;
+	const float start = boundary;
+	const float end = width - boundary;
+	const float range = end - start;
+	const float spawnInterval = range/maxEnemies;
+
+
+	const int numEnemies = 5;
+	vector<int> positionIndices = drawWithoutReplacement(maxEnemies, numEnemies);
+
+	const sf::Vector2f movement(0.f, 100.f);
+
+
+
+	for (auto &index : positionIndices)
 	{
-		shared_ptr<Enemy> e(new Enemy(x, height, zerovec));
-		enemies.push_back(e);
+		shared_ptr<Enemy> e(new Enemy(start + spawnInterval*index, 0, movement));
+		enemies.emplace_back(e);
 	}
 }
+
 
 void Game::run()
 {
 	sf::Clock clock;
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
 
-	spawnEnemies(10, 0);
+	spawnEnemies();
 
 	while (mWindow.isOpen())
 	{
@@ -140,6 +167,12 @@ void Game::handleShotEnemies()
 			}
 		}
 
+		if ((*it)->pos().y >= enemyBoundary)
+		{
+			const sf::Vector2f zero(0,0);
+			(*it)->setMovement(zero);
+		}
+
 		if ((*it)->dead()) {
 			swapWithLast(enemies, *it);
 			enemies.back().reset();
@@ -154,6 +187,9 @@ void Game::handleShotEnemies()
 
 void Game::update(sf::Time deltaTime)
 {
+	if (enemies.empty())
+		spawnEnemies();
+
 	handleShotEnemies();
 	clearInactiveBullets();
 
@@ -174,7 +210,7 @@ void Game::update(sf::Time deltaTime)
 
 		if(t > shotInterval) {
 			sf::Vector2f pos(mPlayer.getPosition());
-			sf::Vector2f offset(22,2);
+			sf::Vector2f offset(24,2);
 			//offset the bullet to appear above the player
 			shared_ptr<Bullet> b(new Bullet(pos, offset, bulletMovement));
 			bullets.push_back(b);
@@ -184,19 +220,24 @@ void Game::update(sf::Time deltaTime)
 
 	mPlayer.move(movement * deltaTime.asSeconds());
 
-	// move bullets 
+	// move objects
 	for (auto it = bullets.begin(); it != bullets.end(); ++it)
 		(*it)->move(deltaTime);
 
+	for (auto it = enemies.begin(); it != enemies.end(); ++it)
+		(*it)->move(deltaTime);
 }
 
 void Game::render()
 {
 	mWindow.clear();
 	mWindow.draw(mPlayer);
+
 	for (auto &b : bullets)
 		mWindow.draw(b->shape());
+
 	for (auto &e : enemies)
 		mWindow.draw(e->shape());
+
 	mWindow.display();
 }

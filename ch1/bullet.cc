@@ -4,7 +4,7 @@ Bullet::Bullet(const sf::Vector2f &pos, const::sf::Vector2f &offset, const sf::V
 	movement(move), 
 	damage(dmg)
 {
-	r.setPosition(pos);
+	r.setPosition(pos + offset);
 	r.setSize(sf::Vector2f(2,5));
 	r.setOutlineColor(sf::Color::Yellow);
 	r.setOutlineThickness(5);

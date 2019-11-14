@@ -53,3 +53,10 @@ bool Enemy::dead() const
 {
 	return health <= 0;
 }
+
+void Enemy::setMovement(const sf::Vector2f & newMovement)
+{
+	movement = newMovement;
+}
+
+
