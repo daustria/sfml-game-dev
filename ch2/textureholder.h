@@ -3,11 +3,13 @@
 #include <memory>
 #include <map>
 #include <SFML/Graphics.hpp>
-enum class Texture { Landscape, Airplane, Missile };
+enum class TextureID { Landscape, Airplane, Missile };
 
 class TextureHolder
 {
+	public:
+		void load(TextureID, const std::string & fname);
 	private:
-		std::map<Texture, std::unique_ptr<sf::Texture>> mTextureMap;
+		std::map<TextureID, std::unique_ptr<sf::Texture>> mTextureMap;
 };
 #endif //TEXTURE_HOLDER_H
