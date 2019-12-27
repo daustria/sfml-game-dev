@@ -4,7 +4,6 @@
 Game::Game():mWindow(sf::VideoMode(640, 480), "LoremIpsum")
 {
 
-
 }
 
 void Game::run() 
@@ -26,6 +25,14 @@ void Game::processEvents()
 		if(event.type == sf::Event::Closed)
 			mWindow.close();
 	}
+
 }
-void Game::update() {}
-void Game::render() {}
+void Game::update() 
+{
+	mWindow.draw(tmap);
+}
+
+void Game::render() 
+{
+	mWindow.display();
+}

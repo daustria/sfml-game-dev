@@ -1,6 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 #include <SFML/Graphics.hpp>
+#include "tilemap.h"
 
 class Game
 {
@@ -13,6 +14,7 @@ class Game
 		void render();
 		
 		sf::RenderWindow mWindow;
+		TileMap tmap;
 		
 };
 #endif //GAME_H
