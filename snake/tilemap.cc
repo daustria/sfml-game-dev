@@ -3,30 +3,51 @@
 
 TileMap::TileMap(): tileWidth(32), tileHeight(24), width(20), height(20), size(400)
 {
-	vertices.setPrimitiveType(sf::Quads);
-	vertices.resize(size*4);
+	cells.reserve(size);
 
-	for (int i = 0; i < size; ++i)
+	//populate cells
+	for(int i = 0; i < size; ++i)
 	{
-		sf::Vertex *quad = &vertices[i*4];
-
 		int row = i/height;
 		int col = i%width;
 
+		int x = col*tileWidth;
+		int y = row*tileHeight;
 
-		quad[0].position = sf::Vector2f(row*tileWidth, col*tileHeight);
-		quad[1].position = sf::Vector2f((row+1)*tileWidth, col*tileHeight);
-		quad[2].position = sf::Vector2f((row+1)*tileWidth, (col+1)*tileHeight);
-		quad[3].position = sf::Vector2f(row*tileWidth,(col+1)*tileHeight);
+		Cell *cp = new Cell{tileWidth, tileHeight, x, y};
+		cells.push_back(cp);
+	}
 
-		quad[0].color = sf::Color::White;
-		quad[1].color = sf::Color::Black;
-		quad[2].color = sf::Color::Black;
-		quad[3].color = sf::Color::Black;
+	//setup neighbours of cells
+	for(int i = 0; i < size; ++i)
+	{
+		Cell *cell = cells[i];
+
+		int up = i - width;
+		int down = i + width;
+		int left = i - 1;
+		int right = i + 1;
+
+		if (up >= 0)
+			cell->left = cells[up];
+		if (down >= 0)
+			cell->down = cells[down];
+		if (left >= 0)
+			cell->left = cells[left];
+		if (right >= 0)
+			cell->right = cells[right];
 	}
 }
 
 void TileMap::draw(sf::RenderTarget &target, sf::RenderStates states) const 
 {
-	target.draw(vertices, states);
+	for (auto &it : cells)
+		(*it).draw(target, states);
+}
+
+
+TileMap::~TileMap()
+{
+	for (auto &it : cells)
+		delete it;
 }
