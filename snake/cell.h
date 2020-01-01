@@ -1,13 +1,18 @@
 #ifndef CELL_H
 #define CELL_H
 #include <SFML/Graphics.hpp>
+#include <memory>
+#include <iostream>
 class Cell : public sf::Drawable
 {
 
 	friend class TileMap;
+	friend std::ostream &operator<<(std::ostream &, const Cell &);
 
 	public:
-		Cell(int w, int h, int topLeftX, int topLeftY);
+		Cell(int w, int h, int topLeftX, int topLeftY);	
+		virtual ~Cell() = default;
+		void setColour(sf::Color);
 
 	private:
 		virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
@@ -17,11 +22,12 @@ class Cell : public sf::Drawable
 		const int x;
 		const int y;
 
-		Cell *left;
-		Cell *right;
-		Cell *up;
-		Cell *down;
+		std::shared_ptr<Cell> left;
+		std::shared_ptr<Cell> right;
+		std::shared_ptr<Cell> up;
+		std::shared_ptr<Cell> down;
 
 		sf::VertexArray vertices;
 };
+std::ostream &operator<<(std::ostream &out, const Cell &c);
 #endif //CELL_H

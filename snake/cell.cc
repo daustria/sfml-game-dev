@@ -15,3 +15,15 @@ Cell::Cell(int w, int h, int topLeftX, int topLeftY):
 }
 
 void Cell::draw(sf::RenderTarget &target, sf::RenderStates states) const { target.draw(vertices); }
+
+void Cell::setColour(sf::Color c)
+{
+	for(int i = 0; i < 4; ++i)
+		vertices[i].color = c;
+}
+
+std::ostream &operator<<(std::ostream &out, const Cell &c)
+{
+	out << "x : " << c.x << ", y : " << c.y;
+	return out;
+}
