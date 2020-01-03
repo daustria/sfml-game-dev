@@ -12,9 +12,12 @@ class Game
 		void processEvents();
 		void update();
 		void render();
-		
+		void handlePlayerInput(sf::Keyboard::Key);
+
 		sf::RenderWindow mWindow;
 		TileMap tmap;
+
+		static sf::Time timePerFrame;
 		
 };
 #endif //GAME_H

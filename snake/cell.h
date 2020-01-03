@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <memory>
 #include <iostream>
+#include "states.h"
 class Cell : public sf::Drawable
 {
 
@@ -13,21 +14,20 @@ class Cell : public sf::Drawable
 		Cell(int w, int h, int topLeftX, int topLeftY);	
 		virtual ~Cell() = default;
 		void setColour(sf::Color);
+		int getX() const;
+		int getY() const;
+		virtual void setState(std::shared_ptr<CellState> newState);
 
 	private:
 		virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
-
 		const int width;
 		const int height;
 		const int x;
 		const int y;
 
-		std::shared_ptr<Cell> left;
-		std::shared_ptr<Cell> right;
-		std::shared_ptr<Cell> up;
-		std::shared_ptr<Cell> down;
-
 		sf::VertexArray vertices;
+
+		std::shared_ptr<CellState> state;
 };
 std::ostream &operator<<(std::ostream &out, const Cell &c);
 #endif //CELL_H
