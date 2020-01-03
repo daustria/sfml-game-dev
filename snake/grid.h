@@ -4,16 +4,18 @@
 #include <vector>
 #include <memory>
 #include "cell.h"
-class TileMap : public sf::Drawable
+#include "states.h"
+class Grid : public sf::Drawable
 {
 	public:
-		TileMap();
+		Grid();
 		void processInput(sf::Keyboard::Key);
 		void update();
 	private:
 		virtual void draw(sf::RenderTarget &, sf::RenderStates states) const;
 		void moveSnake();
 		int getCellIndex(int x, int y) const;
+
 		const int tileWidth;
 		const int tileHeight;
 		const int width;

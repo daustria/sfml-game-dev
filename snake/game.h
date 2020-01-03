@@ -1,7 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 #include <SFML/Graphics.hpp>
-#include "tilemap.h"
+#include "grid.h"
 
 class Game
 {
@@ -15,7 +15,7 @@ class Game
 		void handlePlayerInput(sf::Keyboard::Key);
 
 		sf::RenderWindow mWindow;
-		TileMap tmap;
+		Grid grid;
 
 		static sf::Time timePerFrame;
 		

@@ -46,4 +46,3 @@ void Food::snake(std::shared_ptr<Cell> cp, Direction d)
 	std::shared_ptr<CellState> newState = snakeState;
 	cp->setState(newState);
 }
-

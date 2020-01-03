@@ -36,7 +36,7 @@ void Game::processEvents()
 		switch(event.type)
 		{
 			case sf::Event::KeyPressed:
-				tmap.processInput(event.key.code);
+				grid.processInput(event.key.code);
 				break;
 			case sf::Event::Closed:
 				mWindow.close();
@@ -46,11 +46,11 @@ void Game::processEvents()
 }
 void Game::update() 
 {
-	tmap.update();
+	grid.update();
 }
 
 void Game::render() 
 {
-	mWindow.draw(tmap);
+	mWindow.draw(grid);
 	mWindow.display();
 }

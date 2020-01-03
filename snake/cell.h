@@ -7,7 +7,7 @@
 class Cell : public sf::Drawable
 {
 
-	friend class TileMap;
+	friend class Grid;
 	friend std::ostream &operator<<(std::ostream &, const Cell &);
 
 	public:
