@@ -14,7 +14,7 @@ class Grid : public sf::Drawable
 	private:
 		virtual void draw(sf::RenderTarget &, sf::RenderStates states) const;
 		void moveSnake();
-		int getCellIndex(int x, int y) const;
+		int getCellIndex(int x, int y, Direction = Direction::None) const;
 
 		const int tileWidth;
 		const int tileHeight;
@@ -23,6 +23,6 @@ class Grid : public sf::Drawable
 		const int size;
 
 		std::vector<std::shared_ptr<Cell>> cells;
-		std::vector<std::shared_ptr<Cell>> snakeCells;
+		std::vector<int> snakeIndices;
 };
 #endif //TILE_MAP_H

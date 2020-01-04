@@ -21,48 +21,70 @@ Grid::Grid(): tileWidth(32), tileHeight(24), width(20), height(20), size(400)
 	}
 
 	int headIndex = 101;
-
 	cells[headIndex]->snake();
-
-	snakeCells.push_back(cells[headIndex]);
-
-	int k = 0;
-	for(const auto &it : cells) {
-		std::cout << k << "," << *it << std::endl;
-		++k;
-	}
+	snakeIndices.push_back(headIndex);
 }
 
 void Grid::processInput(sf::Keyboard::Key key)
 {
-	auto head = snakeCells[0];
+	auto head = cells[snakeIndices[0]];
 
 	if (key == sf::Keyboard::W) { 
-		head->state->changeDir(Direction::Up);
+		head->changeDir(Direction::Up);
 	} else if (key == sf::Keyboard::S) {
-		head->state->changeDir(Direction::Down);
+		head->changeDir(Direction::Down);
 	} else if (key == sf::Keyboard::A) {
 		head->state->changeDir(Direction::Left);
 	} else if (key == sf::Keyboard::D) {
-		head->state->changeDir(Direction::Right);
+		head->changeDir(Direction::Right);
 	}
 }
 
 void Grid::update()
 {
-
+	moveSnake();
 }
 
-int Grid::getCellIndex(int x, int y) const
+int Grid::getCellIndex(int x, int y, Direction d) const
 {
 	int row = y/tileHeight;
 	int col = x/tileWidth;
-	return row*width + col;
+	int index = row*width + col;
+	int retVal = -1;
+	
+	switch(d)
+	{
+		case Direction::None:
+			retVal = index;
+			break;
+		case Direction::Up:
+			retVal = index - width;
+			break;
+		case Direction::Down:
+			retVal = index + width;
+			break;
+		case Direction::Left:
+			retVal = index - 1;
+			break;
+		case Direction::Right:
+			retVal = index + 1;
+			break;
+	}
+
+	return retVal;
 }
 
 void Grid::moveSnake()
 {
+	auto head = cells[snakeIndices[0]];
 
+	Direction lastDirection = head->dir();
+	int newIndex = getCellIndex(head->x, head->y, head->dir());
+	auto other = cells[newIndex];
+
+	head->normal();
+	other->snake(lastDirection);
+	snakeIndices[0] = newIndex;
 }
 
 

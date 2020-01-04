@@ -41,6 +41,9 @@ void Cell::normal()
 	state->normal(shared_from_this());
 }
 
+void Cell::changeDir(Direction d) { state->changeDir(d); }
+
+Direction Cell::dir() { return state->dir(); }
 
 std::ostream &operator<<(std::ostream &out, const Cell &c)
 {

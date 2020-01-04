@@ -15,9 +15,14 @@ class Cell : public sf::Drawable, public std::enable_shared_from_this<Cell>
 		virtual ~Cell() = default;
 		void setColour(sf::Color);
 		virtual void setState(std::shared_ptr<CellState> newState);
+
 		void snake(Direction d = Direction::Right);
 		void normal();
 		void food();
+
+		void changeDir(Direction d);
+		Direction dir();
+
 	private:
 		virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
 		const int width;
@@ -26,13 +31,7 @@ class Cell : public sf::Drawable, public std::enable_shared_from_this<Cell>
 		const int y;
 
 		sf::VertexArray vertices;
-
 		std::shared_ptr<CellState> state;
-
-		std::shared_ptr<Cell> up;
-		std::shared_ptr<Cell> down;
-		std::shared_ptr<Cell> left;
-		std::shared_ptr<Cell> right;
 };
 std::ostream &operator<<(std::ostream &out, const Cell &c);
 #endif //CELL_H
