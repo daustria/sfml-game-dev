@@ -1,4 +1,5 @@
 #include "cell.h"
+#include "states.h"
 
 Cell::Cell(int w, int h, int topLeftX, int topLeftY): 
 	width(w), height(h), x(topLeftX), y(topLeftY), vertices(sf::Quads, 4)
@@ -22,11 +23,24 @@ void Cell::setColour(sf::Color c)
 		vertices[i].color = c;
 }
 
-int Cell::getX() const { return x; }
-
-int Cell::getY() const { return y; }
-
 void Cell::setState(std::shared_ptr<CellState> newState) { state = newState; }
+
+void Cell::snake(Direction d)
+{
+	state->snake(shared_from_this());
+	state->changeDir(d);
+}
+
+void Cell::food() 
+{
+	state->food(shared_from_this());
+}
+
+void Cell::normal()
+{
+	state->normal(shared_from_this());
+}
+
 
 std::ostream &operator<<(std::ostream &out, const Cell &c)
 {

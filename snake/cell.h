@@ -4,7 +4,7 @@
 #include <memory>
 #include <iostream>
 #include "states.h"
-class Cell : public sf::Drawable
+class Cell : public sf::Drawable, public std::enable_shared_from_this<Cell>
 {
 
 	friend class Grid;
@@ -14,10 +14,10 @@ class Cell : public sf::Drawable
 		Cell(int w, int h, int topLeftX, int topLeftY);	
 		virtual ~Cell() = default;
 		void setColour(sf::Color);
-		int getX() const;
-		int getY() const;
 		virtual void setState(std::shared_ptr<CellState> newState);
-
+		void snake(Direction d = Direction::Right);
+		void normal();
+		void food();
 	private:
 		virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
 		const int width;
@@ -28,6 +28,11 @@ class Cell : public sf::Drawable
 		sf::VertexArray vertices;
 
 		std::shared_ptr<CellState> state;
+
+		std::shared_ptr<Cell> up;
+		std::shared_ptr<Cell> down;
+		std::shared_ptr<Cell> left;
+		std::shared_ptr<Cell> right;
 };
 std::ostream &operator<<(std::ostream &out, const Cell &c);
 #endif //CELL_H

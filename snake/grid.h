@@ -23,5 +23,6 @@ class Grid : public sf::Drawable
 		const int size;
 
 		std::vector<std::shared_ptr<Cell>> cells;
+		std::vector<std::shared_ptr<Cell>> snakeCells;
 };
 #endif //TILE_MAP_H

@@ -1,6 +1,5 @@
 #include "states.h"
 #include "cell.h"
-Snake::Snake(Direction dir): dir_(dir) {}
 
 void Snake::normal(std::shared_ptr<Cell> cp)
 {
@@ -10,14 +9,12 @@ void Snake::normal(std::shared_ptr<Cell> cp)
 	cp->setState(newState);
 }
 
-void Snake::changeDir(Direction d) { dir_ = d; }
-
 Direction Snake::dir() { return dir_; }
 
-void Normal::snake(std::shared_ptr<Cell> cp, Direction d)
+void Normal::snake(std::shared_ptr<Cell> cp)
 {
 	cp->setColour(sf::Color::Blue);
-	auto snakeState = std::make_shared<Snake>(d);
+	auto snakeState = std::make_shared<Snake>();
 	std::shared_ptr<CellState> newState = snakeState;
 	cp->setState(newState);
 }
@@ -38,11 +35,10 @@ void Food::normal(std::shared_ptr<Cell> cp)
 	cp->setState(newState);
 }
 
-
-void Food::snake(std::shared_ptr<Cell> cp, Direction d)
+void Food::snake(std::shared_ptr<Cell> cp)
 {
 	cp->setColour(sf::Color::Blue);
-	auto snakeState = std::make_shared<Snake>(d);
+	auto snakeState = std::make_shared<Snake>();
 	std::shared_ptr<CellState> newState = snakeState;
 	cp->setState(newState);
 }
